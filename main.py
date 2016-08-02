@@ -12,7 +12,7 @@ class Snake:
     #Dimensions of the play area
     cls_x_size = 5
     cls_y_size = 5
-    
+
     cls_directions = ["UP", "RIGHT", "DOWN", "LEFT"]
 
     def __init__(self):
@@ -32,7 +32,7 @@ class Snake:
     def move_and_increase_size(self):
         tail = self.body_segments[-1]
         new_segment = Pixel(tail.x, tail.y)
-        self.self_move()
+        self.move()
         self.body_segments.append(new_segment)
 
     def move(self):
@@ -106,9 +106,9 @@ food = Snake_Food(snake)
 while True:
     #Check input
     if button_a.was_pressed():
-        snake.self_turn_anticlockwise()
+        snake.turn_anticlockwise()
     if button_b.was_pressed():
-        snake.self_turn_clockwise()
+        snake.turn_clockwise()
 
     #Check if we've eaten the food
     if (snake.body_segments[0].x == food.x) and (snake.body_segments[0].y == food.y):
@@ -121,7 +121,7 @@ while True:
         food.y = coords[1]
     #Else just move
     else:
-        if snake.self_move():
+        if snake.move():
             break
 
     display.clear()
