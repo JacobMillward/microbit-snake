@@ -29,13 +29,8 @@ class Snake:
         l = len(Snake.cls_directions)
         self.direction = (self.direction + 1) % l
 
-    def move_and_increase_size(self):
+    def move(self, increase_size = False):
         tail = self.body_segments[-1]
-        new_segment = Pixel(tail.x, tail.y)
-        self.move()
-        self.body_segments.append(new_segment)
-
-    def move(self):
         prev_segment = None
         for index, segment in reversed(list(enumerate(self.body_segments))):
             #If not the head, move segments to position of the segment ahead of it
@@ -53,7 +48,9 @@ class Snake:
                     self.body_segments[0].y = (self.body_segments[0].y + 1) % Snake.cls_y_size
                 elif Snake.cls_directions[self.direction] == "LEFT":
                     self.body_segments[0].x = (self.body_segments[0].x + ( Snake.cls_x_size - 1 )) % Snake.cls_y_size
-
+        
+        if increase_size:
+            self.body_segments.append(Pixel(tail.x, tail.y))
         return self.check_collision()
 
     def check_collision(self):
@@ -111,18 +108,14 @@ while True:
         snake.turn_clockwise()
 
     #Check if we've eaten the food
-    if (snake.body_segments[0].x == food.x) and (snake.body_segments[0].y == food.y):
-        #If we colide this returns true
-        if snake.move_and_increase_size():
+    let food_collide = (snake.body_segments[0].x == food.x) and (snake.body_segments[0].y == food.y)
+    if snake.move(food_collide):
             break
+    if food_collide:
         #Generate new coordinates for the food
         coords = food.generate_coords(snake)
         food.x = coords[0]
         food.y = coords[1]
-    #Else just move
-    else:
-        if snake.move():
-            break
 
     display.clear()
     #Render the snake over the top of the food
